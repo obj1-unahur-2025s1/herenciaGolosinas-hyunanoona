@@ -1,11 +1,14 @@
-/*
- * Los sabores
- */
+//Los sabores
+
 object frutilla { }
 object chocolate { }
 object vainilla { }
 object naranja { }
 object limon { }
+
+
+// clase madre/golosina
+
 
 class Golosinas {
 	var peso = 15
@@ -17,7 +20,7 @@ class Golosinas {
 }
 
 
-// Golosinas
+// clases hijas/golosinas
 
 class Bombon inherits Golosinas(){
 	override method precio() = 5
@@ -35,16 +38,15 @@ class Alfajor inherits Golosinas(libreGluten = false){
 }
 
 class Caramelo {
-	var peso = 5
+	var property peso = 5
 	var property sabor = frutilla
 
 	method precio() = 12 
-	method peso() = peso 
 	method mordisco() { peso = peso - 1 }
 }
 
 
-class CarameloCorazon inherits Caramelo{
+class CarameloRelleno inherits Caramelo{
 	override method mordisco() {
 		super() //llama a clase mother y agrega todo lo demas. si el metodo tiene parametros, hay que pasarselos por el super tambien.
 		sabor = chocolate
@@ -85,19 +87,19 @@ class Oblea {
 	method libreGluten() = false 
 }
 
-/*
+
 class ObleaCrujiente inherits Oblea{
 	var cantidadDeMordiscos = 0
+
 	override method mordisco() {
-		if (cantidadDeMordiscos < 3) 
-			super()
-			peso = peso -3
-			cantidadDeMordiscos = cantidadDeMordiscos + 1
-		else 
-		super() 
+	  super()
+	  cantidadDeMordiscos = cantidadDeMordiscos + 1
+		if (cantidadDeMordiscos <= 3) 
+			peso = peso - 3
 	}
+	method estaDebil() = cantidadDeMordiscos > 3
 }
-*/
+
 
 class Chocolatin inherits Golosinas{
 	// hay que acordarse de *dos* cosas, el peso inicial y el peso actual
@@ -113,6 +115,16 @@ class Chocolatin inherits Golosinas{
 	method sabor() = chocolate 
 	method libreGluten() = false 
 
+}
+
+class ChocolatinVIP{
+  var humedad
+  
+  method initialize() {
+    if (not humedad.between(0, 1)){
+      self.error(humedad.toString() + "no es un valor valido de humedad")
+    }
+  }
 }
 
 class GolosinaBaniada {
