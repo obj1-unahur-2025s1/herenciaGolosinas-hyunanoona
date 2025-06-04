@@ -101,7 +101,7 @@ class ObleaCrujiente inherits Oblea{
 }
 
 
-class Chocolatin inherits Golosinas{
+class Chocolatin inherits Golosinas(libreGluten = false){
 	// hay que acordarse de *dos* cosas, el peso inicial y el peso actual
 	// el precio se calcula a partir del precio inicial
 	// el mordisco afecta al peso actual
@@ -109,22 +109,30 @@ class Chocolatin inherits Golosinas{
 	var comido = 0
 	
 	method pesoInicial(unPeso) { pesoInicial = unPeso }
-	method precio() = pesoInicial * 0.50 
-	method peso() = (pesoInicial - comido).max(0) 
+	override method precio() = pesoInicial * 0.50 
+	override method peso() = (pesoInicial - comido).max(0) 
 	method mordisco() { comido = comido + 2 }
 	method sabor() = chocolate 
-	method libreGluten() = false 
-
 }
 
-class ChocolatinVIP{
-  var humedad
-  
+class ChocolatinVIP inherits Chocolatin{
+  override method peso() = super() * (1 + self.humedad())
+  method humedad() = heladeraDeMariano.humedad()
+}
+
+
+object heladeraDeMariano{
+  var property humedad
   method initialize() {
     if (not humedad.between(0, 1)){
       self.error(humedad.toString() + "no es un valor valido de humedad")
     }
   }
+}
+
+
+class ChocolatinPremiun inherits ChocolatinVIP{
+  override method humedad() = super() * 0.5 
 }
 
 class GolosinaBaniada {
@@ -162,7 +170,3 @@ class BombonesDuros inherits Bombon{
 	override method mordisco() {peso = peso - 1}
 	method gradoDureza() = if (peso > 12) 3 else if (peso.between(8, 12)) 2 else 1
 }
-
-
-
-//git config -- user.email "amelie.paz@estudiantes.unahur.edu.ar" git config -- user.name "hyunanoona"
